@@ -1,0 +1,19 @@
+import mongoose from "mongoose";
+
+const EventSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  dep: { type: String, required: true },
+  img: { type: String },
+  desc: { type: String },
+  structure: { type: String },
+  rules: { type: [String], default: [] },
+  teamSize: { type: Number, default: 1 },
+  contact_info: { type: String },
+  registerdStudents: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    default: [],
+  },
+});
+
+const Event = mongoose.model("Event", EventSchema);
+export default Event;
