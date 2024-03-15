@@ -1,4 +1,5 @@
 import Event from "../models/eventModel.js";
+import User from "../models/userModel.js";
 
 export const createEvent = async (req, res) => {
   const { name, dep, img, desc, structure, rules, teamSize, contact_info } =
@@ -83,26 +84,38 @@ export const deleteEvent = async (req, res) => {
 };
 
 export const eventRegistration = async (req, res) => {
-  const userId = req.user;
-  const eventId = req.params.userId;
+  const eventId = req.params.id;
   const { tzkIds } = req.body;
 
   try {
-    const event = await Event.findByIdAndUpdate(
+    const existingUsers = await User.find({ tzkid: { $in: tzkIds } });
+    if (existingUsers.length !== tzkIds.length) {
+      return res.status(404).json({ message: `Invalid Teckzite Ids` });
+    }
+
+    const userIds = existingUsers.map((user) => user._id);
+
+    const updatedEvent = await Event.findByIdAndUpdate(
       eventId,
-      { $push: { registerdStudents: tzkIds } },
+      { $push: { registerdStudents: userIds } },
       { new: true }
     );
 
-    for (const id of tzkIds) {
-      await User.findByIdAndUpdate(id, { $push: { regEvents: eventId } });
+    if (updatedEvent.teamSize !== userIds.length) {
+      await User.updateMany(
+        { _id: { $in: userIds } },
+        { $pull: { regEvents: eventId } }
+      );
+
+      await Event.findByIdAndUpdate(
+        eventId,
+        { $pull: { registerdStudents: userIds } },
+        { new: true }
+      );
+      return res.status(400).json({ message: "Team size doesn't match" });
     }
 
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-
-    return res.status(200).json({ event });
+    return res.status(200).json({ event: updatedEvent });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });

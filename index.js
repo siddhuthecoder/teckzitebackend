@@ -7,6 +7,7 @@ import helmet from "helmet";
 
 import userRoutes from "./routes/userRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
+import workshopRoutes from "./routes/workshopRoutes.js";
 
 //middleware
 dotenv.config();
@@ -34,3 +35,4 @@ mongoose
 // Routes
 app.use("/user", userRoutes);
 app.use("/events", eventRoutes);
+app.use("/workshops", workshopRoutes);

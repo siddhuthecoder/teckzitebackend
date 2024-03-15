@@ -11,6 +11,7 @@ import { verifyUserToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
+// router.get("/getRegs/:id");
 router.post("/new", createEvent);
 router.get("/all-events", fetchAllEvents);
 router.get("/:id", fetchEventById);
