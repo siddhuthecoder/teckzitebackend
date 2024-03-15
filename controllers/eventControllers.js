@@ -38,7 +38,7 @@ export const fetchAllEvents = async (req, res) => {
 export const fetchEventById = async (req, res) => {
   try {
     const { id } = req.params;
-    const event = await Competitions.findById(id);
+    const event = await Event.findById(id);
 
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
@@ -56,7 +56,7 @@ export const editEvent = async (req, res) => {
     const { name, dep, img, desc, structure, rules, teamSize, contact_info } =
       req.body;
 
-    const updatedEvent = await Competitions.findByIdAndUpdate(
+    const updatedEvent = await Event.findByIdAndUpdate(
       id,
       { name, dep, img, desc, structure, rules, teamSize, contact_info },
       { new: true }
@@ -79,5 +79,32 @@ export const deleteEvent = async (req, res) => {
     res.status(200).json({ message: "Deleted Successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal Server error" });
+  }
+};
+
+export const eventRegistration = async (req, res) => {
+  const userId = req.user;
+  const eventId = req.params.userId;
+  const { tzkIds } = req.body;
+
+  try {
+    const event = await Event.findByIdAndUpdate(
+      eventId,
+      { $push: { registerdStudents: tzkIds } },
+      { new: true }
+    );
+
+    for (const id of tzkIds) {
+      await User.findByIdAndUpdate(id, { $push: { regEvents: eventId } });
+    }
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    return res.status(200).json({ event });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };

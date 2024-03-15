@@ -9,10 +9,12 @@ const EventSchema = new mongoose.Schema({
   rules: { type: [String], default: [] },
   teamSize: { type: Number, default: 1 },
   contact_info: { type: String },
-  registerdStudents: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    default: [],
-  },
+  registerdStudents: [
+    {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+      default: [],
+    },
+  ],
 });
 
 const Event = mongoose.model("Event", EventSchema);
