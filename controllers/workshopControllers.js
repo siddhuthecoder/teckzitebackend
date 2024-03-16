@@ -9,7 +9,7 @@ export const newWorkshopUpload = async (req, res) => {
       workshopImg,
       structure,
       contact,
-      instructirName,
+      instructorName,
       instructorSpecifications,
       instructorImage,
     } = req.body;
@@ -21,7 +21,7 @@ export const newWorkshopUpload = async (req, res) => {
       workshopImg,
       structure,
       contact,
-      instructirName,
+      instructorName,
       instructorSpecifications,
       instructorImage,
     });
