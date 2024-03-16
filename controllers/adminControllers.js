@@ -28,7 +28,7 @@ export const adminRegister = async (req, res) => {
   try {
     const user = await Admin.findOne({ username });
     if (user) {
-      return res.status(400).json({ message: "User Already Exists" });
+      return res.status(400).json({ message: "User Already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
