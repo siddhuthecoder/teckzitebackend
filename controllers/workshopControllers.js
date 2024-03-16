@@ -37,7 +37,7 @@ export const fetchAllWorkshops = async (req, res) => {
   try {
     const allWorkshops = await Workshop.find();
 
-    res.status(200).json({ workshops });
+    res.status(200).json(allWorkshops);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
