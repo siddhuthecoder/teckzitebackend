@@ -102,3 +102,17 @@ export const editWorkshop = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const deleteWorkshop = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const del = await Workshop.findByIdAndDelete(id);
+    if (!del) {
+      return res.status(400).json({ errro: "No Workshop found" });
+    }
+    return res.status(200).json({ message: "Deleted Succesfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: "Internal Server Error" });
+  }
+};
