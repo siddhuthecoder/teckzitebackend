@@ -5,7 +5,7 @@ export const adminLogin = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await User.find({ username });
+    const user = await Admin.findOne({ username });
     if (!user) {
       return res.status(404).json({ message: "Invalid Credentials" });
     }
@@ -17,8 +17,8 @@ export const adminLogin = async (req, res) => {
 
     return res.status(200).json({ user });
   } catch (error) {
-    console.log(error);
-    return res.status(404).json({ message: "Internal Server Error" });
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -26,12 +26,12 @@ export const adminRegister = async (req, res) => {
   const { username, password, role } = req.body;
 
   try {
-    const user = await Admin.find({ username });
+    const user = await Admin.findOne({ username });
     if (user) {
-      return res.status(404).json({ message: "User Already Exists" });
+      return res.status(400).json({ message: "User Already Exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(user.password, bcrypt.genSalt(12));
+    const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = await Admin.create({
       username,
       role,
@@ -40,7 +40,7 @@ export const adminRegister = async (req, res) => {
 
     return res.status(200).json({ newUser });
   } catch (error) {
-    console.log(error);
-    return res.status(404).json({ message: "Internal Server Error" });
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };

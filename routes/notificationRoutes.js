@@ -7,12 +7,12 @@ import {
   newNotification,
 } from "../controllers/notificationControllers.js";
 
-const notificationRouter = express.Router();
+const router = express.Router();
 
-notificationRouter.get("/", fetchNotification);
-notificationRouter.get("/:id", fetchNotificationById);
-notificationRouter.post("/new", newNotification);
-notificationRouter.put("/update/:id", editNotification);
-notificationRouter.delete("/delete/:id", deleteNotification);
+router.get("/", fetchNotification);
+router.get("/:id", fetchNotificationById);
+router.post("/new", newNotification);
+router.put("/update/:id", editNotification);
+router.delete("/delete/:id", deleteNotification);
 
-export default notificationRouter;
+export default router;
