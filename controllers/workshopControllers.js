@@ -37,10 +37,6 @@ export const fetchAllWorkshops = async (req, res) => {
   try {
     const allWorkshops = await Workshop.find();
 
-    if (!allWorkshops || allWorkshops.length === 0) {
-      return res.status(404).json({ message: "No workshops found" });
-    }
-
     res.status(200).json({ workshops });
   } catch (error) {
     res.status(500).json({ error: error.message });
