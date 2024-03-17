@@ -7,9 +7,13 @@ export const loginUser = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    const checkSub = await bcrypt.compare(sub, user.sub);
-    if (!checkSub) {
-      return res.status(404).json({ message: "Invalid Attempt to login" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const passwordMatch = await bcrypt.compare(sub, user.sub);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
@@ -17,7 +21,8 @@ export const loginUser = async (req, res) => {
     });
     return res.status(200).json({ user, token });
   } catch (error) {
-    return res.status(200).json({ message: "No User Found", user: null });
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -39,13 +44,13 @@ export const registerUser = async (req, res) => {
     referredBy,
   } = req.body;
 
-  const sub = await bcrypt.hash(email.slice[(1, email.length - 1)], 12);
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
 
+    const sub = await bcrypt.hash(email, 12); // Using email for generating sub
     const user = await User.create({
       email,
       firstName,
@@ -63,13 +68,24 @@ export const registerUser = async (req, res) => {
       city,
       referredBy,
     });
+
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
     return res.status(200).json({ user, token });
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({ error: "Internal Server Error" });
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const fetchUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -83,7 +99,7 @@ export const fetchUser = async (req, res) => {
     }
     return res.status(200).json({ user });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
