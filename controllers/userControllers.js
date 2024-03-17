@@ -39,7 +39,7 @@ export const registerUser = async (req, res) => {
     referredBy,
   } = req.body;
 
-  const sub = await bcrypt.hash(email.slice[(0, 4)], 12);
+  const sub = await bcrypt.hash(email.slice[(1, email.length - 1)], 12);
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
