@@ -11,7 +11,7 @@ import adminTokenCheck from "../middleware/adminTokenCheck.js";
 const router = express.Router();
 
 router.get("/all-notifications", fetchNotification);
-router.get("/:id", fetchNotificationById);
+router.get("/note/:id", fetchNotificationById);
 router.post("/new", adminTokenCheck, newNotification);
 router.put("/update/:id", adminTokenCheck, editNotification);
 router.delete("/delete/:id", adminTokenCheck, deleteNotification);
