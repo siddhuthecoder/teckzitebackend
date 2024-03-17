@@ -1,5 +1,6 @@
 import Admin from "../models/adminModel.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const adminLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -15,7 +16,13 @@ export const adminLogin = async (req, res) => {
       return res.status(404).json({ message: "Invalid Credentials" });
     }
 
-    return res.status(200).json({ user });
+    const token = jwt.sign(
+      { adminId: user._id },
+      process.env.JWT_ADMIN_SECRET,
+      { expiresIn: "3h" }
+    );
+
+    return res.status(200).json({ user, token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });

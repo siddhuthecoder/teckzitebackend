@@ -6,12 +6,13 @@ import {
   fetchWorkshopById,
   newWorkshopUpload,
 } from "../controllers/workshopControllers.js";
+import adminTokenCheck from "../middleware/adminTokenCheck.js";
 
 const router = express.Router();
-router.post("/new", newWorkshopUpload);
 router.get("/all-workshops", fetchAllWorkshops);
 router.get("/:id", fetchWorkshopById);
-router.put("/edit-workshop/:id", editWorkshop);
-router.delete("/delete/:id", deleteWorkshop);
+router.post("/new", adminTokenCheck, newWorkshopUpload);
+router.put("/edit-workshop/:id", adminTokenCheck, editWorkshop);
+router.delete("/delete/:id", adminTokenCheck, deleteWorkshop);
 
 export default router;

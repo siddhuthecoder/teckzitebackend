@@ -8,15 +8,16 @@ import {
   eventRegistration,
 } from "../controllers/eventControllers.js";
 import { verifyUserToken } from "../middleware/auth.js";
+import adminTokenCheck from "../middleware/adminTokenCheck.js";
 
 const router = express.Router();
 
-// router.get("/getRegs/:id");
-router.post("/new", createEvent);
+router.post("/new", adminTokenCheck, createEvent);
 router.get("/all-events", fetchAllEvents);
 router.get("/:id", fetchEventById);
-router.put("/edit-event/:id", editEvent);
-router.delete("/delete-event/:id", deleteEvent);
+router.put("/edit-event/:id", adminTokenCheck, editEvent);
+router.delete("/delete-event/:id", adminTokenCheck, deleteEvent);
+// router.get("/getRegs/:id");
 
 router.post("/register/:id", verifyUserToken, eventRegistration);
 
