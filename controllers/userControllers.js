@@ -1,11 +1,17 @@
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export const loginUser = async (req, res) => {
   const { email, sub } = req.body;
 
   try {
-    const user = await User.findOne({ email, sub });
+    const user = await User.findOne({ email });
+    const checkSub = await bcrypt.compare(sub, user.sub);
+    if (!checkSub) {
+      return res.status(404).json({ message: "Invalid Attempt to login" });
+    }
+
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
@@ -24,7 +30,6 @@ export const registerUser = async (req, res) => {
     phno,
     year,
     collegeId,
-    sub,
     gender,
     img,
     state,
@@ -34,6 +39,7 @@ export const registerUser = async (req, res) => {
     referredBy,
   } = req.body;
 
+  const sub = await bcrypt.hash(email.slice[(0, 4)], 12);
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
