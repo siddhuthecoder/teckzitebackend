@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema(
     college: String,
     phno: { type: String, length: 10 },
     year: String,
+    branch: String,
     collegeId: String,
     gender: String,
     referredBy: String,
