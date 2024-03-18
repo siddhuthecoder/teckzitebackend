@@ -10,6 +10,7 @@ const workshopSchema = new mongoose.Schema({
   workshopImg: String,
   structure: String,
   contact: String,
+  entryFee: String,
   instructorName: String,
   instructorSpecifications: String,
   instructorImage: String,
