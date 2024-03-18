@@ -7,6 +7,7 @@ const EventSchema = new mongoose.Schema({
   desc: { type: String },
   structure: { type: String },
   rules: { type: [String], default: [] },
+  timeline: String,
   teamSize: { type: Number, default: 1 },
   contact_info: { type: String },
   prizeMoney: { type: String },
