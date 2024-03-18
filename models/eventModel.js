@@ -13,7 +13,7 @@ const EventSchema = new mongoose.Schema({
   prizeMoney: { type: String },
   registerdStudents: [
     {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+      type: [{ type: String }],
       default: [],
     },
   ],

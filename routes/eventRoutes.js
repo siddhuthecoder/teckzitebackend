@@ -17,7 +17,6 @@ router.get("/all-events", fetchAllEvents);
 router.get("/:id", fetchEventById);
 router.put("/edit-event/:id", adminTokenCheck, editEvent);
 router.delete("/delete-event/:id", adminTokenCheck, deleteEvent);
-// router.get("/getRegs/:id");
 
 router.post("/register/:id", verifyUserToken, eventRegistration);
 

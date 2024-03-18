@@ -130,7 +130,7 @@ export const eventRegistration = async (req, res) => {
 
     const updatedEvent = await Event.findByIdAndUpdate(
       eventId,
-      { $push: { registerdStudents: userIds } },
+      { $push: { registerdStudents: tzkIds } },
       { new: true }
     );
 
@@ -148,7 +148,12 @@ export const eventRegistration = async (req, res) => {
       return res.status(400).json({ message: "Team size doesn't match" });
     }
 
-    return res.status(200).json({ event: updatedEvent });
+    await User.updateMany(
+      { _id: { $in: userIds } },
+      { $push: { regEvents: eventId } }
+    );
+
+    return res.status(200).json({ message: "Registered Successfully" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
