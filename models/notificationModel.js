@@ -5,12 +5,6 @@ const notificationSchema = new mongoose.Schema({
   info: String,
   picturePath: {
     type: String,
-    validate: {
-      validator: function (value) {
-        return value.startsWith("http");
-      },
-      message: (props) => `${props.value} is not a valid URL for picturePath`,
-    },
   },
   link: {
     type: String,
