@@ -2,8 +2,17 @@ import Event from "../models/eventModel.js";
 import User from "../models/userModel.js";
 
 export const createEvent = async (req, res) => {
-  const { name, dep, img, desc, structure, rules, teamSize, contact_info } =
-    req.body;
+  const {
+    name,
+    dep,
+    img,
+    desc,
+    structure,
+    rules,
+    prizeMoney,
+    teamSize,
+    contact_info,
+  } = req.body;
   try {
     const event = await Event.create({
       name,
@@ -55,8 +64,17 @@ export const fetchEventById = async (req, res) => {
 export const editEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, dep, img, desc, structure, rules, teamSize, contact_info } =
-      req.body;
+    const {
+      name,
+      dep,
+      img,
+      desc,
+      prizeMoney,
+      structure,
+      rules,
+      teamSize,
+      contact_info,
+    } = req.body;
 
     const updatedEvent = await Event.findByIdAndUpdate(
       id,
