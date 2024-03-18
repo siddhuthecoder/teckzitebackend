@@ -1,4 +1,5 @@
 import Admin from "../models/adminModel.js";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const adminLogin = async (req, res) => {
@@ -9,7 +10,9 @@ export const adminLogin = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "Invalid Credentials" });
     }
-    if (user.password !== password) {
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(404).json({ message: "Invalid Credentials" });
     }
 
@@ -35,10 +38,13 @@ export const adminRegister = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const newUser = await Admin.create({
       username,
       role,
-      password,
+      password: hashedPassword,
     });
 
     return res.status(200).json({ user: newUser });
