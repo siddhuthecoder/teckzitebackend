@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/all-notifications", fetchNotification);
 router.get("/note/:id", fetchNotificationById);
-router.post("/new", adminTokenCheck, newNotification);
+router.post("/create/new", adminTokenCheck, newNotification);
 router.put("/update/:id", adminTokenCheck, editNotification);
 router.delete("/delete/:id", adminTokenCheck, deleteNotification);
 
