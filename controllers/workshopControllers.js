@@ -71,7 +71,7 @@ export const editWorkshop = async (req, res) => {
       structure,
       entryFee,
       contact,
-      instructirName,
+      instructorName,
       instructorSpecifications,
       instructorImage,
     } = req.body;
@@ -86,7 +86,7 @@ export const editWorkshop = async (req, res) => {
         structure,
         contact,
         entryFee,
-        instructirName,
+        instructorName,
         instructorSpecifications,
         instructorImage,
       },
