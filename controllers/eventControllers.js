@@ -12,6 +12,7 @@ export const createEvent = async (req, res) => {
       desc,
       structure,
       rules,
+      prizeMoney,
       teamSize,
       contact_info,
     });
@@ -59,7 +60,17 @@ export const editEvent = async (req, res) => {
 
     const updatedEvent = await Event.findByIdAndUpdate(
       id,
-      { name, dep, img, desc, structure, rules, teamSize, contact_info },
+      {
+        name,
+        dep,
+        img,
+        desc,
+        structure,
+        prizeMoney,
+        rules,
+        teamSize,
+        contact_info,
+      },
       { new: true }
     );
 

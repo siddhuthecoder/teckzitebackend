@@ -9,6 +9,7 @@ const EventSchema = new mongoose.Schema({
   rules: { type: [String], default: [] },
   teamSize: { type: Number, default: 1 },
   contact_info: { type: String },
+  prizeMoney: { type: String },
   registerdStudents: [
     {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
