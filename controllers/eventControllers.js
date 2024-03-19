@@ -128,6 +128,16 @@ export const eventRegistration = async (req, res) => {
 
     const userIds = existingUsers.map((user) => user._id);
 
+    const usersWithEvent = await User.find({
+      _id: { $in: userIds },
+      regEvents: eventId,
+    });
+    if (usersWithEvent.length > 0) {
+      return res.status(400).json({
+        message: "One or more users are already registered for this event",
+      });
+    }
+
     const updatedEvent = await Event.findByIdAndUpdate(
       eventId,
       { $push: { registerdStudents: tzkIds } },
@@ -142,7 +152,7 @@ export const eventRegistration = async (req, res) => {
 
       await Event.findByIdAndUpdate(
         eventId,
-        { $pull: { registerdStudents: userIds } },
+        { $pull: { registerdStudents: tzkIds } },
         { new: true }
       );
       return res.status(400).json({ message: "Team size doesn't match" });
@@ -157,5 +167,27 @@ export const eventRegistration = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getAllRegisteredStudents = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const event = await Event.findById(id);
+    var details = [];
+    const regTeams = event.registerdStudents;
+    regTeams.forEach((team) => {
+      let temp = [];
+      team.forEach(async (id) => {
+        const user = await User.findOne({ tzkid: id });
+        temp.push(user);
+      });
+      details.push(temp);
+    });
+
+    return res.status(200).json({ responses: details });
+  } catch (error) {
+    console.log(error);
+    console.log(error.message);
   }
 };

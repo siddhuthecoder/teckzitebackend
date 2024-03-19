@@ -6,6 +6,7 @@ import {
   editEvent,
   deleteEvent,
   eventRegistration,
+  getAllRegisteredStudents,
 } from "../controllers/eventControllers.js";
 import { verifyUserToken } from "../middleware/auth.js";
 import adminTokenCheck from "../middleware/adminTokenCheck.js";
@@ -17,7 +18,7 @@ router.get("/all-events", fetchAllEvents);
 router.get("/:id", fetchEventById);
 router.put("/edit-event/:id", adminTokenCheck, editEvent);
 router.delete("/delete-event/:id", adminTokenCheck, deleteEvent);
-
+router.get("/view-responses/:id", adminTokenCheck, getAllRegisteredStudents);
 router.post("/register/:id", verifyUserToken, eventRegistration);
 
 export default router;

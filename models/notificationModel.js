@@ -8,12 +8,6 @@ const notificationSchema = new mongoose.Schema({
   },
   link: {
     type: String,
-    validate: {
-      validator: function (value) {
-        return value.startsWith("http");
-      },
-      message: (props) => `${props.value} is not a valid URL for link`,
-    },
   },
 });
 
