@@ -174,20 +174,20 @@ export const getAllRegisteredStudents = async (req, res) => {
   const { id } = req.params;
   try {
     const event = await Event.findById(id);
-    var details = [];
     const regTeams = event.registerdStudents;
-    regTeams.forEach((team) => {
-      let temp = [];
-      team.forEach(async (id) => {
-        const user = await User.findOne({ tzkid: id });
-        temp.push(user);
+
+    const teamDetailsPromises = regTeams.map(async (team) => {
+      const teamMembersPromises = team.map(async (id) => {
+        return await User.findOne({ tzkid: id });
       });
-      details.push(temp);
+      return Promise.all(teamMembersPromises);
     });
 
-    return res.status(200).json({ responses: details });
+    const teamDetails = await Promise.all(teamDetailsPromises);
+
+    return res.status(200).json({ responses: teamDetails });
   } catch (error) {
-    console.log(error);
-    console.log(error.message);
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
