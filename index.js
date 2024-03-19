@@ -16,13 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-
-const allowedOrigins = ["https://admin-blond-eight.vercel.app/", "*"];
-app.use(
-  cors({
-    origin: allowedOrigins,
-  })
-);
+app.use(cors());
 
 /* DATABSE CONNECTION */
 mongoose
