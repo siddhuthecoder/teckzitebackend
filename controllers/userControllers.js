@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { instance } from "../index.js";
+import crypto from "crypto";
 
 export const loginUser = async (req, res) => {
   const { email, sub } = req.body;
@@ -157,22 +158,20 @@ export const createOrder = async (req, res) => {
 };
 
 export const paymentVerification = async (req, res) => {
-  const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
-    req.body;
+  const { razorpay_payment_id, order_id, razorpay_signature } = req.body;
 
-  var body = razorpay_order_id + "|" + razorpay_payment_id;
-  var crypto = require("crypto");
-  var expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_KEY_ID)
-    .update(body.toString())
-    .digest("hex");
+  const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
+  hmac.update(order_id + "|" + razorpay_payment_id);
+  const generated_signature = hmac.digest("hex");
 
-  const isAuth = expectedSignature === razorpay_signature;
+  const isAuth = generated_signature === razorpay_signature;
+  console.log(generated_signature);
+  console.log(razorpay_signature);
   if (isAuth) {
-    return res.send(200).json({ success: true });
+    return res.status(200).json({ success: true });
   } else {
     return res.status(400).json({
-      messgae: "Payment Failed Due to Signature not matched",
+      message: "Payment Failed Due to Signature not matched",
       success: false,
     });
   }
