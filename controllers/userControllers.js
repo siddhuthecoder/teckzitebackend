@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { instance } from "../index.js";
 
 export const loginUser = async (req, res) => {
   const { email, sub } = req.body;
@@ -42,7 +43,9 @@ export const registerUser = async (req, res) => {
     district,
     idUpload,
     city,
+    mode,
     referredBy,
+    razorpay_order_id,
   } = req.body;
 
   try {
@@ -63,13 +66,24 @@ export const registerUser = async (req, res) => {
       collegeId,
       gender,
       img,
+      razorpay_order_id,
       state,
       district,
       idUpload,
       sub,
       city,
       referredBy,
+      mode,
     });
+
+    if (!mode) {
+      return res.status(400).json({ error: "Mode Error" });
+    }
+    if (mode !== "offline_mode") {
+      if (!razorpay_order_id) {
+        return res.status(400).json({ error: "Payment Check Error" });
+      }
+    }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
@@ -117,5 +131,49 @@ export const fetchUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const createOrder = async (req, res) => {
+  const { email, amount } = req.body;
+  const domainPattern = /@(rguktn|rgukto|rgukts|rguktr)\.ac\.in$/;
+
+  let ramount = amount;
+  if (domainPattern.test(email)) {
+    ramount = Number(process.env.FEE_RGUKT);
+  } else {
+    ramount = Number(process.env.FEE_OUTSIDERS);
+  }
+
+  const order = await instance.orders.create({
+    amount: Number(ramount * 100),
+    currency: "INR",
+  });
+
+  if (!order.id) {
+    res.status(200).send({ status: "Failure" });
+  }
+  res.status(200).send({ order, status: "success" });
+};
+
+export const paymentVerification = async (req, res) => {
+  const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+    req.body;
+
+  var body = razorpay_order_id + "|" + razorpay_payment_id;
+  var crypto = require("crypto");
+  var expectedSignature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_ID)
+    .update(body.toString())
+    .digest("hex");
+
+  const isAuth = expectedSignature === razorpay_signature;
+  if (isAuth) {
+    return res.send(200).json({ success: true });
+  } else {
+    return res.status(400).json({
+      messgae: "Payment Failed Due to Signature not matched",
+      success: false,
+    });
   }
 };

@@ -32,6 +32,8 @@ const UserSchema = new mongoose.Schema(
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Workshop" }],
       default: [],
     },
+    razorpay_order_id: String,
+    mode: String,
   },
   {
     timestamps: true,

@@ -5,6 +5,8 @@ import {
   fetchUser,
   fetchUsers,
   fetchUserById,
+  createOrder,
+  paymentVerification,
 } from "../controllers/userControllers.js";
 import { verifyUserToken } from "../middleware/auth.js";
 
@@ -15,5 +17,8 @@ router.post("/register", registerUser);
 router.get("/getAll", fetchUsers);
 router.get("/", verifyUserToken, fetchUser);
 router.get("/:id", fetchUserById);
+
+router.post("/order/create", createOrder);
+router.post("/order/verify", paymentVerification);
 
 export default router;
