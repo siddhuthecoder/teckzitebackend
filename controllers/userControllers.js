@@ -90,6 +90,10 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User not registered" });
     }
 
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
     const ref = await User.findOneAndUpdate(
       { tzkid: referredBy },
       { $push: { refreals: user.tzkid } }
@@ -98,9 +102,15 @@ export const registerUser = async (req, res) => {
     if (!ref) {
       return res
         .status(200)
-        .json({ message: "Registration Succesful\nReferral was not valid" });
+        .json({
+          token,
+          user,
+          message: "Registration Succesful\nReferral was not valid",
+        });
     }
-    return res.status(200).json({ message: "Registration Succesful" });
+    return res
+      .status(200)
+      .json({ user, token, message: "Registration Succesful" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });

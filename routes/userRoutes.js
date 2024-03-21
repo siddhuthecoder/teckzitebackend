@@ -10,14 +10,15 @@ import {
   getTopReferrals,
 } from "../controllers/userControllers.js";
 import { verifyUserToken } from "../middleware/auth.js";
+import adminTokenCheck from "../middleware/adminTokenCheck.js";
 
 const router = express.Router();
 
 router.post("/login", loginUser);
 router.post("/register", registerUser);
-router.get("/getAll", fetchUsers);
+router.get("/getAll", adminTokenCheck, fetchUsers);
 router.get("/", verifyUserToken, fetchUser);
-router.get("/:id", fetchUserById);
+router.get("/:id", adminTokenCheck, fetchUserById);
 
 router.post("/order/create", createOrder);
 router.post("/order/verify", paymentVerification);
