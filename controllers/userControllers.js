@@ -193,14 +193,11 @@ export const getTopReferrals = async (req, res) => {
     const users = await User.find(
       {},
       { email: 1, firstName: 1, tzkid: 1, refreals: 1 }
-    )
-      .sort({ "refreals.length": -1 })
-      .limit(10);
+    );
 
     const formattedUsers = users.map((user) => ({
       email: user.email,
       firstName: user.firstName,
-      lastName: user.lastName,
       tzkid: user.tzkid,
       referralsCount: user.refreals.length,
     }));
