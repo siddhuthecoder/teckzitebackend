@@ -152,7 +152,15 @@ export const fetchUser = async (req, res) => {
   const userId = req.user;
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId)
+      .populate({
+        path: "regEvents",
+        select: "img name _id",
+      })
+      .populate({
+        path: "regWorkshop",
+        select: "workshopImg name _id",
+      });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
