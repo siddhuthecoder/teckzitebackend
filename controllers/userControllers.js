@@ -156,7 +156,7 @@ export const fetchUser = async (req, res) => {
 
 export const createOrder = async (req, res) => {
   const { email, amount } = req.body;
-  const domainPattern = /@(rguktn|rgukto|rgukts|rguktr)\.ac\.in$/;
+  const domainPattern = /@(rguktn|rguktong|rguktsklm|rguktrkv)\.ac\.in$/;
 
   let ramount = amount;
   if (domainPattern.test(email)) {
