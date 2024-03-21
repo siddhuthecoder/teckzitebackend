@@ -198,7 +198,7 @@ export const paymentVerification = async (req, res) => {
 
 export const getTopReferrals = async (req, res) => {
   try {
-    const users = await User.find({}, { email: 1, firstName: 1, tzkid: 1 });
+    const users = await User.find();
     users.sort((a, b) => b.refreals.length - a.refreals.length);
     const topUsers = users.slice(0, 10);
 
