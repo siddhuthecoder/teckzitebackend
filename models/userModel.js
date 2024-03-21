@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema(
     sub: { type: String, unique: true },
     idUpload: String,
     refreals: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+      type: [{ type: String }],
       default: [],
     },
     regEvents: {

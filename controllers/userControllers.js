@@ -55,6 +55,15 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
+    if (!mode) {
+      return res.status(400).json({ error: "Mode Error" });
+    }
+    if (mode !== "offline_mode") {
+      if (!razorpay_order_id) {
+        return res.status(400).json({ error: "Payment Check Error" });
+      }
+    }
+
     const sub = await bcrypt.hash(email, 12);
     const user = await User.create({
       email,
@@ -77,19 +86,21 @@ export const registerUser = async (req, res) => {
       mode,
     });
 
-    if (!mode) {
-      return res.status(400).json({ error: "Mode Error" });
-    }
-    if (mode !== "offline_mode") {
-      if (!razorpay_order_id) {
-        return res.status(400).json({ error: "Payment Check Error" });
-      }
+    if (!user) {
+      return res.status(400).json({ message: "User not registered" });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-    return res.status(200).json({ user, token });
+    const ref = await User.findOneAndUpdate(
+      { tzkid: referredBy },
+      { $push: { refreals: user.tzkid } }
+    );
+
+    if (!ref) {
+      return res
+        .status(200)
+        .json({ message: "Registration Succesful\nReferral was not valid" });
+    }
+    return res.status(200).json({ message: "Registration Succesful" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -174,5 +185,29 @@ export const paymentVerification = async (req, res) => {
       message: "Payment Failed Due to Signature not matched",
       success: false,
     });
+  }
+};
+
+export const getTopReferrals = async (req, res) => {
+  try {
+    const users = await User.find(
+      {},
+      { email: 1, firstName: 1, tzkid: 1, refreals: 1 }
+    )
+      .sort({ "refreals.length": -1 })
+      .limit(10);
+
+    const formattedUsers = users.map((user) => ({
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      tzkid: user.tzkid,
+      referralsCount: user.refreals.length,
+    }));
+
+    return res.status(200).json({ leaderboard: formattedUsers });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
