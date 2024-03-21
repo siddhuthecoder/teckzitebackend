@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema(
       default: [],
     },
     regEvents: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Events" }],
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
       default: [],
     },
     regWorkshop: {

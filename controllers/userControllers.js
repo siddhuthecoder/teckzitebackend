@@ -8,7 +8,16 @@ export const loginUser = async (req, res) => {
   const { email, sub } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
+      .populate({
+        path: "regEvents",
+        select: "img name _id",
+      })
+      .populate({
+        path: "regWorkshop",
+        select: "workshopImg name _id",
+      });
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
