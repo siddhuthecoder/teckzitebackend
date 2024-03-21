@@ -100,13 +100,11 @@ export const registerUser = async (req, res) => {
     );
 
     if (!ref) {
-      return res
-        .status(200)
-        .json({
-          token,
-          user,
-          message: "Registration Succesful\nReferral was not valid",
-        });
+      return res.status(200).json({
+        token,
+        user,
+        message: "Registration Succesful\nReferral was not valid",
+      });
     }
     return res
       .status(200)
@@ -200,12 +198,11 @@ export const paymentVerification = async (req, res) => {
 
 export const getTopReferrals = async (req, res) => {
   try {
-    const users = await User.find(
-      {},
-      { email: 1, firstName: 1, tzkid: 1, refreals: 1 }
-    );
+    const users = await User.find({}, { email: 1, firstName: 1, tzkid: 1 });
+    users.sort((a, b) => b.refreals.length - a.refreals.length);
+    const topUsers = users.slice(0, 10);
 
-    const formattedUsers = users.map((user) => ({
+    const formattedUsers = topUsers.map((user) => ({
       email: user.email,
       firstName: user.firstName,
       tzkid: user.tzkid,
