@@ -15,7 +15,7 @@ import adminTokenCheck from "../middleware/adminTokenCheck.js";
 const router = express.Router();
 
 router.post("/login", loginUser);
-router.post("/register", registerUser);
+router.post("/register", adminTokenCheck, registerUser);
 router.get("/getAll", adminTokenCheck, fetchUsers);
 router.get("/", verifyUserToken, fetchUser);
 router.get("/:id", adminTokenCheck, fetchUserById);

@@ -173,7 +173,8 @@ export const fetchUser = async (req, res) => {
 
 export const createOrder = async (req, res) => {
   const { email, amount } = req.body;
-  const domainPattern = /@(rguktn|rguktong|rguktsklm|rguktrkv)\.ac\.in$/;
+  const domainPattern =
+    /^(r|n|s|o)[a-z]{6}@(rguktn|rguktong|rguktsklm|rguktrkv)\.ac\.in$/;
 
   let ramount = amount;
   if (domainPattern.test(email)) {
@@ -194,17 +195,71 @@ export const createOrder = async (req, res) => {
 };
 
 export const paymentVerification = async (req, res) => {
-  const { razorpay_payment_id, order_id, razorpay_signature } = req.body;
+  const { razorpay_payment_id, order_id, razorpay_signature, userData } =
+    req.body;
 
   const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
   hmac.update(order_id + "|" + razorpay_payment_id);
   const generated_signature = hmac.digest("hex");
 
   const isAuth = generated_signature === razorpay_signature;
-  console.log(generated_signature);
-  console.log(razorpay_signature);
   if (isAuth) {
-    return res.status(200).json({ success: true });
+    const existingUser = await User.findOne({ email: userData.email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    if (!userData.mode) {
+      return res.status(400).json({ error: "Mode Error" });
+    }
+
+    const sub = await bcrypt.hash(userData.email, 12);
+    const user = await User.create({
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      college: userData.college,
+      phno: userData.phno,
+      year: userData.year,
+      branch: userData.branch,
+      collegeId: userData.collegeId,
+      gender: userData.gender,
+      img: userData.img,
+      razorpay_order_id: order_id,
+      state: userData.state,
+      district: userData.district,
+      idUpload: userData.idUpload,
+      sub,
+      city: userData.city,
+      referredBy: userData.referredBy,
+      mode: userData.mode,
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not registered" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    const ref = await User.findOneAndUpdate(
+      { tzkid: referredBy },
+      { $push: { refreals: user.tzkid } }
+    );
+
+    if (!ref) {
+      return res.status(200).json({
+        token,
+        user,
+        success: true,
+        message: "Registration Succesful\nReferral was not valid",
+      });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, token, user, message: "Registration Succesful" });
   } else {
     return res.status(400).json({
       message: "Payment Failed Due to Signature not matched",
