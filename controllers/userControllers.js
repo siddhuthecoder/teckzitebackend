@@ -244,7 +244,7 @@ export const paymentVerification = async (req, res) => {
     });
 
     const ref = await User.findOneAndUpdate(
-      { tzkid: referredBy },
+      { tzkid: userData.referredBy },
       { $push: { refreals: user.tzkid } }
     );
 
