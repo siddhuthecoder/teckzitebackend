@@ -16,7 +16,7 @@ const router = express.Router();
 router.post("/new", adminTokenCheck, createEvent);
 router.get("/all-events", fetchAllEvents);
 router.get("/:id", fetchEventById);
-router.put("/edit-event/:id", adminTokenCheck, editEvent);
+router.put("/edit/:id", adminTokenCheck, editEvent);
 router.delete("/delete-event/:id", adminTokenCheck, deleteEvent);
 router.get("/view-responses/:id", adminTokenCheck, getAllRegisteredStudents);
 router.post("/register/:id", verifyUserToken, eventRegistration);
