@@ -18,16 +18,9 @@ app.use(express.json());
 app.use(bodyParser.json({ limit: "50mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "https://admin-blond-eight.vercel.app",
-  "https://teckzite.vercel.app",
-  "https://teckzite.org",
-];
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: "*",
   })
 );
 
