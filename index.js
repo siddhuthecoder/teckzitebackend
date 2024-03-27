@@ -17,7 +17,18 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.json({ limit: "50mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-app.use(cors());
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://admin-blond-eight.vercel.app",
+  "https://teckzite.vercel.app",
+  "https://teckzite.org",
+];
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
 
 export const instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
