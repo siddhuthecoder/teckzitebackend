@@ -18,11 +18,7 @@ app.use(express.json());
 app.use(bodyParser.json({ limit: "1mb" }));
 app.use(bodyParser.urlencoded({ limit: "1mb", extended: true }));
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors());
 
 export const instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
