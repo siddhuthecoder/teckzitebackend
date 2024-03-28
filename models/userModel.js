@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
     year: String,
     branch: String,
     collegeId: String,
+    amountPaid: String,
     gender: String,
     referredBy: String,
     img: String,

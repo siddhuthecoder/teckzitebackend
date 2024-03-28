@@ -41,6 +41,7 @@ export const registerUser = async (req, res) => {
   const {
     email,
     firstName,
+    amountPaid,
     lastName,
     college,
     phno,
@@ -195,8 +196,13 @@ export const createOrder = async (req, res) => {
 };
 
 export const paymentVerification = async (req, res) => {
-  const { razorpay_payment_id, order_id, razorpay_signature, userData } =
-    req.body;
+  const {
+    razorpay_payment_id,
+    order_id,
+    amount,
+    razorpay_signature,
+    userData,
+  } = req.body;
 
   const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
   hmac.update(order_id + "|" + razorpay_payment_id);
@@ -224,6 +230,7 @@ export const paymentVerification = async (req, res) => {
       branch: userData.branch,
       collegeId: userData.collegeId,
       gender: userData.gender,
+      amountPaid: amount,
       img: userData.img,
       razorpay_order_id: order_id,
       state: userData.state,
