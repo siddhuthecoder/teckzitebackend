@@ -80,6 +80,7 @@ export const registerUser = async (req, res) => {
       firstName,
       lastName,
       college,
+      amountPaid,
       phno,
       year,
       branch,
