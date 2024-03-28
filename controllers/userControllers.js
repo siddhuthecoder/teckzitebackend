@@ -56,7 +56,6 @@ export const registerUser = async (req, res) => {
     city,
     mode,
     referredBy,
-    razorpay_order_id,
   } = req.body;
 
   try {
@@ -87,7 +86,6 @@ export const registerUser = async (req, res) => {
       collegeId,
       gender,
       img,
-      razorpay_order_id,
       state,
       district,
       idUpload,

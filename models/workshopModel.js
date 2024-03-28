@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 
+const regStudentsSchema = new mongoose.Schema({
+  email: { type: String, unique: true },
+  name: String,
+  phno: String,
+  idNumber: String,
+  college: String,
+});
+
 const workshopSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -14,6 +22,7 @@ const workshopSchema = new mongoose.Schema({
   instructorName: String,
   instructorSpecifications: String,
   instructorImage: String,
+  regStudents: { type: [regStudentsSchema], default: [] },
 });
 
 const Workshop = mongoose.model("Workshop", workshopSchema);

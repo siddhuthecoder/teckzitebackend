@@ -5,6 +5,7 @@ import {
   fetchAllWorkshops,
   fetchWorkshopById,
   newWorkshopUpload,
+  registerWorkshop,
 } from "../controllers/workshopControllers.js";
 import adminTokenCheck from "../middleware/adminTokenCheck.js";
 
@@ -14,5 +15,6 @@ router.get("/:id", fetchWorkshopById);
 router.post("/create/new", adminTokenCheck, newWorkshopUpload);
 router.put("/edit-workshop/:id", adminTokenCheck, editWorkshop);
 router.delete("/delete/:id", adminTokenCheck, deleteWorkshop);
+router.post("/register/:id", registerWorkshop);
 
 export default router;
