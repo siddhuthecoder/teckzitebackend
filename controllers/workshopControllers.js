@@ -28,11 +28,13 @@ export const newWorkshopUpload = async (req, res) => {
       instructorName,
       instructorSpecifications,
       instructorImage,
+      regStudents: [],
     });
 
     const savedWorkshop = await newWorkshop.save();
     res.status(201).json(savedWorkshop);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
