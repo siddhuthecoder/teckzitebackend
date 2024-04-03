@@ -48,10 +48,10 @@ const workshopSchema = new mongoose.Schema({
   instructorName: String,
   instructorSpecifications: String,
   instructorImage: String,
-  regStudents: {
-    type: [regStudentsSchema],
-    default: [],
-  },
+  // regStudents: {
+  //   type: [regStudentsSchema],
+  //   default: [],
+  // },
 });
 
 const Workshop = mongoose.model("Workshop", workshopSchema);
