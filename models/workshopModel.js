@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const regStudentsSchema = new mongoose.Schema({
-  email: { type: String, unique: true },
+  email: { type: String },
   name: String,
   phno: String,
   idNumber: String,
