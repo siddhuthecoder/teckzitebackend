@@ -377,3 +377,13 @@ export const getTopReferrals = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const getSignUsers = async (req, res) => {
+  try {
+    const signusers = await SignUser.find();
+    return res.status(200).json({ signusers });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
