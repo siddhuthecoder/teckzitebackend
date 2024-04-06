@@ -76,10 +76,7 @@ export const editUser = async (req, res) => {
         state,
         district,
         idUpload,
-        sub,
         city,
-        referredBy,
-        mode,
       }
     );
 
@@ -87,9 +84,7 @@ export const editUser = async (req, res) => {
       return res.status(400).json({ message: "User not registered" });
     }
 
-    return res
-      .status(200)
-      .json({ user, token, message: "User updated successfully" });
+    return res.status(200).json({ user, message: "User updated successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
