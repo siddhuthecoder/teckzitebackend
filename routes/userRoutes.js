@@ -8,6 +8,7 @@ import {
   createOrder,
   paymentVerification,
   getTopReferrals,
+  editUser,
 } from "../controllers/userControllers.js";
 import { verifyUserToken } from "../middleware/auth.js";
 import adminTokenCheck from "../middleware/adminTokenCheck.js";
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.post("/login", loginUser);
 router.post("/register", adminTokenCheck, registerUser);
+router.put("/edit/:id", adminTokenCheck, editUser);
 router.get("/getAll", adminTokenCheck, fetchUsers);
 router.get("/", verifyUserToken, fetchUser);
 router.get("/:id", adminTokenCheck, fetchUserById);

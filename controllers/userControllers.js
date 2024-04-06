@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { instance } from "../index.js";
 import crypto from "crypto";
+import SignUser from "../models/signUserModel.js";
 
 export const loginUser = async (req, res) => {
   const { email, sub } = req.body;
@@ -31,6 +32,61 @@ export const loginUser = async (req, res) => {
       expiresIn: "1d",
     });
     return res.status(200).json({ user, token });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const editUser = async (req, res) => {
+  const { id } = req.params;
+  const {
+    email,
+    firstName,
+    amountPaid,
+    lastName,
+    college,
+    phno,
+    year,
+    branch,
+    collegeId,
+    gender,
+    img,
+    state,
+    district,
+    idUpload,
+    city,
+  } = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(id, {
+      email,
+      firstName,
+      lastName,
+      college,
+      amountPaid,
+      phno,
+      year,
+      branch,
+      collegeId,
+      gender,
+      img,
+      state,
+      district,
+      idUpload,
+      sub,
+      city,
+      referredBy,
+      mode,
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not registered" });
+    }
+
+    return res
+      .status(200)
+      .json({ user, token, message: "User updated successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -172,9 +228,35 @@ export const fetchUser = async (req, res) => {
 };
 
 export const createOrder = async (req, res) => {
-  const { email, amount } = req.body;
+  const {
+    email,
+    amount,
+    firstName,
+    lastName,
+    college,
+    phno,
+    year,
+    branch,
+    collegeId,
+  } = req.body;
+
   const domainPattern =
     /^(r|n|s|o)[0-9]{6}@(rguktn|rguktong|rguktsklm|rguktrkv)\.ac\.in$/;
+
+  const signUser = await SignUser.create({
+    email,
+    firstName,
+    lastName,
+    college,
+    phno,
+    year,
+    branch,
+    collegeId,
+  });
+
+  if (!signUser) {
+    return res.status(500).json({ message: "Check your internet connection" });
+  }
 
   let ramount = amount;
   if (domainPattern.test(email)) {
@@ -240,6 +322,8 @@ export const paymentVerification = async (req, res) => {
       referredBy: userData.referredBy,
       mode: userData.mode,
     });
+
+    await AdminUser.findOneAndDelete({ email: userData.email });
 
     if (!user) {
       return res.status(400).json({ message: "User not registered" });
