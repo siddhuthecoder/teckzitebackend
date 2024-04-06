@@ -59,26 +59,29 @@ export const editUser = async (req, res) => {
   } = req.body;
 
   try {
-    const user = await User.findByIdAndUpdate(id, {
-      email,
-      firstName,
-      lastName,
-      college,
-      amountPaid,
-      phno,
-      year,
-      branch,
-      collegeId,
-      gender,
-      img,
-      state,
-      district,
-      idUpload,
-      sub,
-      city,
-      referredBy,
-      mode,
-    });
+    const user = await User.findOneAndUpdate(
+      { tzkid: id },
+      {
+        email,
+        firstName,
+        lastName,
+        college,
+        amountPaid,
+        phno,
+        year,
+        branch,
+        collegeId,
+        gender,
+        img,
+        state,
+        district,
+        idUpload,
+        sub,
+        city,
+        referredBy,
+        mode,
+      }
+    );
 
     if (!user) {
       return res.status(400).json({ message: "User not registered" });
