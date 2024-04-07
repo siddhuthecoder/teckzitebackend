@@ -377,9 +377,9 @@ export const getTopReferrals = async (req, res) => {
 };
 
 export const getSignUsers = async (req, res) => {
+  console.log("test");
   try {
     const signusers = await SignUser.find();
-    console.log(signusers);
     return res.status(200).json({ signusers });
   } catch (error) {
     console.log(error);
