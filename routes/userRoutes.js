@@ -28,6 +28,6 @@ router.post("/order/verify", paymentVerification);
 
 router.get("/refs/top", getTopReferrals);
 
-router.get("/signusers", getSignUsers);
+router.get("/signusers", adminTokenCheck, getSignUsers);
 
 export default router;
