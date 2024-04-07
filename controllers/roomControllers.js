@@ -34,10 +34,12 @@ export const addPerson = async (req, res) => {
 
     const rooms = await Room.find({ gender }).sort({ createdAt: 1 });
     let roomFound = false;
+    let roomNumber = "";
     for (const room of rooms) {
       if (room.people.length < 6) {
         room.people.push(tzkid.toLowerCase());
         await room.save();
+        roomNumber = room.roomNo;
         roomFound = true;
         break;
       }
@@ -49,7 +51,9 @@ export const addPerson = async (req, res) => {
         .json({ message: "No available room for this gender" });
     }
 
-    res.status(200).json({ message: "Person added to a room successfully" });
+    res
+      .status(200)
+      .json({ roomNumber, message: "Person added to a room successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
