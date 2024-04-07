@@ -239,7 +239,7 @@ export const createOrder = async (req, res) => {
   } = req.body;
 
   const domainPattern =
-    /^(r|n|s|o)[0-9]{6}@(rguktn|rguktong|rguktsklm|rguktrkv)\.ac\.in$/;
+    /^(r|n|s|o|ro)[0-9]{6}@(rguktn|rguktong|rguktsklm|rguktrkv)\.ac\.in$/;
 
   const signUser = await SignUser.create({
     email,
@@ -379,6 +379,7 @@ export const getTopReferrals = async (req, res) => {
 export const getSignUsers = async (req, res) => {
   try {
     const signusers = await SignUser.find();
+    console.log(signusers);
     return res.status(200).json({ signusers });
   } catch (error) {
     console.log(error);
