@@ -9,7 +9,6 @@ import {
   paymentVerification,
   getTopReferrals,
   editUser,
-  getSignUsers,
 } from "../controllers/userControllers.js";
 import { verifyUserToken } from "../middleware/auth.js";
 import adminTokenCheck from "../middleware/adminTokenCheck.js";
@@ -27,7 +26,5 @@ router.post("/order/create", createOrder);
 router.post("/order/verify", paymentVerification);
 
 router.get("/refs/top", getTopReferrals);
-
-router.get("/signusers", adminTokenCheck, getSignUsers);
 
 export default router;

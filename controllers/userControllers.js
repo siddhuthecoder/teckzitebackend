@@ -376,7 +376,7 @@ export const getTopReferrals = async (req, res) => {
   }
 };
 
-export const getSignUsers = async (req, res) => {
+export const getAllSignUsers = async (req, res) => {
   console.log("test");
   try {
     const signusers = await SignUser.find();

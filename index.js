@@ -10,6 +10,8 @@ import eventRoutes from "./routes/eventRoutes.js";
 import workshopRoutes from "./routes/workshopRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import adminTokenCheck from "./middleware/adminTokenCheck.js";
+import { getAllSignUsers } from "./controllers/userControllers.js";
 
 //middleware
 dotenv.config();
@@ -44,3 +46,5 @@ app.use("/events", eventRoutes);
 app.use("/workshops", workshopRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/admin", adminRoutes);
+
+app.get("/signusers", adminTokenCheck, getAllSignUsers);
