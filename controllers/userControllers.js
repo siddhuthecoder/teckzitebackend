@@ -59,6 +59,7 @@ export const editUser = async (req, res) => {
   } = req.body;
 
   try {
+    const sub = await bcrypt.hash(email, 12);
     const user = await User.findOneAndUpdate(
       { tzkid: id },
       {
@@ -67,6 +68,7 @@ export const editUser = async (req, res) => {
         lastName,
         college,
         amountPaid,
+        sub,
         phno,
         year,
         branch,
