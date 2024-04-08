@@ -160,7 +160,7 @@ export const registerUser = async (req, res) => {
     });
 
     const ref = await User.findOneAndUpdate(
-      { tzkid: referredBy },
+      { tzkid: referredBy.toLowerCase() },
       { $push: { refreals: user.tzkid } }
     );
 
@@ -334,7 +334,7 @@ export const paymentVerification = async (req, res) => {
     });
 
     const ref = await User.findOneAndUpdate(
-      { tzkid: userData.referredBy },
+      { tzkid: userData.referredBy.toLowerCase() },
       { $push: { refreals: user.tzkid } }
     );
 
