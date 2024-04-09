@@ -61,7 +61,7 @@ export const deleteNotification = async (req, res) => {
 
 export const fetchNotification = async (req, res) => {
   try {
-    const notifications = await Notification.find().sort({ createdAt: 1 });
+    const notifications = await Notification.find().sort({ createdAt: -1 });
     return res.status(200).json({ notifications });
   } catch (error) {
     console.log(error);
