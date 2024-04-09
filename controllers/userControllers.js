@@ -159,18 +159,19 @@ export const registerUser = async (req, res) => {
       expiresIn: "1d",
     });
 
-    const ref = await User.findOneAndUpdate(
-      { tzkid: referredBy.toLowerCase() },
-      { $push: { refreals: user.tzkid } }
-    );
+    // const ref = await User.findOneAndUpdate(
+    //   { tzkid: referredBy.toLowerCase() },
+    //   { $push: { refreals: user.tzkid } }
+    // );
 
-    if (!ref) {
-      return res.status(200).json({
-        token,
-        user,
-        message: "Registration Succesful\nReferral was not valid",
-      });
-    }
+    // if (!ref) {
+    //   return res.status(200).json({
+    //     token,
+    //     user,
+    //     message: "Registration Succesful\nReferral was not valid",
+    //   });
+    // }
+
     return res
       .status(200)
       .json({ user, token, message: "Registration Succesful" });
@@ -333,18 +334,20 @@ export const paymentVerification = async (req, res) => {
       expiresIn: "1d",
     });
 
-    const ref = await User.findOneAndUpdate(
-      { tzkid: userData.referredBy.toLowerCase() },
-      { $push: { refreals: user.tzkid } }
-    );
+    if (userData.referredBy && userData.referredBy.length === 9) {
+      const ref = await User.findOneAndUpdate(
+        { tzkid: userData.referredBy.toLowerCase() },
+        { $push: { refreals: user.tzkid } }
+      );
 
-    if (!ref) {
-      return res.status(200).json({
-        token,
-        user,
-        success: true,
-        message: "Registration Succesful\nReferral was not valid",
-      });
+      if (!ref) {
+        return res.status(200).json({
+          token,
+          user,
+          success: true,
+          message: "Registration Succesful\nReferral was not valid",
+        });
+      }
     }
 
     return res
