@@ -324,7 +324,7 @@ export const paymentVerification = async (req, res) => {
       mode: userData.mode,
     });
 
-    await AdminUser.findOneAndDelete({ email: userData.email });
+    await SignUser.findOneAndDelete({ email: userData.email });
 
     if (!user) {
       return res.status(400).json({ message: "User not registered" });
