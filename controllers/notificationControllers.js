@@ -60,13 +60,14 @@ export const deleteNotification = async (req, res) => {
 };
 
 export const fetchNotification = async (req, res) => {
-  try {
-    const notifications = await Notification.find().sort({ createdAt: -1 });
-    return res.status(200).json({ notifications });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: err.message });
-  }
+try {
+  const notifications = await Notification.find().sort({ createdAt: 1 });
+  return res.status(200).json({ notifications: notifications.reverse() });
+} catch (error) {
+  console.log(error);
+  res.status(500).json({ error: error.message });
+}
+
 };
 
 export const fetchNotificationById = async (req, res) => {
