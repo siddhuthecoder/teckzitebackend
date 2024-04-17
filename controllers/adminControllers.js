@@ -7,6 +7,11 @@ export const adminLogin = async (req, res) => {
 
   try {
     const user = await Admin.findOne({ username });
+    // Admin.getCollection("user").createIndex(
+    //   { "username": 1 },
+    //   { "name": "username_1", "unique": true }
+    // );
+    
     if (!user) {
       return res.status(404).json({ message: "Invalid Credentials" });
     }

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { instance } from "../index.js";
 import crypto from "crypto";
 import SignUser from "../models/signUserModel.js";
+import { log } from "console";
 
 export const loginUser = async (req, res) => {
   const { email, sub } = req.body;
@@ -171,6 +172,26 @@ export const registerUser = async (req, res) => {
     //     message: "Registration Succesful\nReferral was not valid",
     //   });
     // }
+     //send mail
+     teckziteid=user.tzkid;
+     await sendemail({
+     teckziteid,
+      email,
+      firstName,
+      lastName,
+      college,
+      amountPaid,
+      phno,
+      year,
+      branch,
+      collegeId,
+      gender,
+      state,
+      district,
+      city,
+      referredBy,
+     })
+
 
     return res
       .status(200)
@@ -350,9 +371,19 @@ export const paymentVerification = async (req, res) => {
       }
     }
 
+
+
+    //mail sending
+    
+
+
+
     return res
       .status(200)
-      .json({ success: true, token, user, message: "Registration Succesful" });
+      .json({ success: true, token, user, message: "Registration SuccessFull" });
+
+
+
   } else {
     return res.status(400).json({
       message: "Payment Failed Due to Signature not matched",
@@ -360,6 +391,77 @@ export const paymentVerification = async (req, res) => {
     });
   }
 };
+
+
+
+const sendemail = async ({ teckziteid,
+  email,
+  firstName,
+  lastName,
+  college,
+  amountPaid,
+  phno,
+  year,
+  branch,
+  collegeId,
+  gender,
+  state,
+  district,
+  city,
+  referredBy,}) => {
+ console.log(email,firstName,lastName,college,amountPaid,phno,year,
+  branch,
+  collegeId,
+  gender,
+  state,
+  district,
+  city,
+  referredBy,)
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.email",
+      service: "gmail",
+      auth: {
+        user: "abhiram777777@gmail.com",
+        pass: "yrnn bpel euyc puwc",
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    // Craft the email content
+    const mailOptions = {
+      from: "noreply@gmail.com",
+      to: email,
+      subject: "Teckzite Registration Successfull",
+      html: `
+       <h1>Cheerio Invitation</h1>
+       <h1>${teckziteid}</h1>
+       <h1>${firstName}</h1>
+       <h1>${lastName}</h1>
+       <h1>${college}</h1>
+       <h1>${amountPaid}</h1>
+       <h1>${phno}</h1>
+       <h1>${year}</h1>
+       <h1>${branch}</h1>
+       <h1>${collegeId}</h1>
+       <h1>${gender}</h1>
+       <h1>${state}</h1>
+        
+    
+
+      `,
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent:", info.messageId);
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
+};
+
 
 export const getTopReferrals = async (req, res) => {
   try {
