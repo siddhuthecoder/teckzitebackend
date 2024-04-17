@@ -5,6 +5,7 @@ import { instance } from "../index.js";
 import crypto from "crypto";
 import SignUser from "../models/signUserModel.js";
 import { log } from "console";
+import nodemailer from 'nodemailer'
 
 export const loginUser = async (req, res) => {
   const { email, sub } = req.body;
@@ -173,9 +174,12 @@ export const registerUser = async (req, res) => {
     //   });
     // }
      //send mail
-     teckziteid=user.tzkid;
+    //  console.log("Teckzite ID:", user.tzkid);
+     const teckziteId = user.tzkid;
+    //  console.log(teckziteId);
+     
      await sendemail({
-     teckziteid,
+     teckziteId,
       email,
       firstName,
       lastName,
@@ -394,7 +398,8 @@ export const paymentVerification = async (req, res) => {
 
 
 
-const sendemail = async ({ teckziteid,
+const sendemail = async ({ 
+  teckziteId,
   email,
   firstName,
   lastName,
@@ -422,8 +427,8 @@ const sendemail = async ({ teckziteid,
       host: "smtp.gmail.email",
       service: "gmail",
       auth: {
-        user: "abhiram777777@gmail.com",
-        pass: "yrnn bpel euyc puwc",
+        user: "codewithsiddhu@gmail.com",
+        pass: "dlal duio nspt uiul",
       },
       tls: {
         rejectUnauthorized: false,
@@ -437,7 +442,7 @@ const sendemail = async ({ teckziteid,
       subject: "Teckzite Registration Successfull",
       html: `
        <h1>Cheerio Invitation</h1>
-       <h1>${teckziteid}</h1>
+       <h1>${teckziteId}</h1>
        <h1>${firstName}</h1>
        <h1>${lastName}</h1>
        <h1>${college}</h1>
