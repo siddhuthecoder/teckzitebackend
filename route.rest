@@ -12,7 +12,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjVmODNhZGNjYzkzMTdhODI0ODFlYWM5IiwiaWF0IjoxNzEzMzU0MzE2LCJleHAiOjE3MTMzOTc1MTZ9.dkK1EQAjt8XDf6itN_6BdJSHAL0272oZ1Iajhxsmlzc
 
 {
-    "email": "n200081@rguktn.ac.in",
+    "email": "siddarthyernagula2004@gmail.com",
     "firstName": "John",
     "lastName": "Doe",
     "college": "Example University",

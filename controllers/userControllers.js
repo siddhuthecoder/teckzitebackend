@@ -176,25 +176,11 @@ export const registerUser = async (req, res) => {
      //send mail
     //  console.log("Teckzite ID:", user.tzkid);
      const teckziteId = user.tzkid;
-    //  console.log(teckziteId);
+  
      
-     await sendemail({
-     teckziteId,
-      email,
-      firstName,
-      lastName,
-      college,
-      amountPaid,
-      phno,
-      year,
-      branch,
-      collegeId,
-      gender,
-      state,
-      district,
-      city,
-      referredBy,
-     })
+     await sendemail(
+    user
+     )
 
 
     return res
@@ -377,10 +363,12 @@ export const paymentVerification = async (req, res) => {
 
 
 
-    //mail sending
-    
-
-
+  
+     
+     await sendemail(
+     user
+     )
+ 
 
     return res
       .status(200)
@@ -398,30 +386,9 @@ export const paymentVerification = async (req, res) => {
 
 
 
-const sendemail = async ({ 
-  teckziteId,
-  email,
-  firstName,
-  lastName,
-  college,
-  amountPaid,
-  phno,
-  year,
-  branch,
-  collegeId,
-  gender,
-  state,
-  district,
-  city,
-  referredBy,}) => {
- console.log(email,firstName,lastName,college,amountPaid,phno,year,
-  branch,
-  collegeId,
-  gender,
-  state,
-  district,
-  city,
-  referredBy,)
+const sendemail = async ( 
+  user) => {
+ 
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.email",
@@ -438,22 +405,23 @@ const sendemail = async ({
     // Craft the email content
     const mailOptions = {
       from: "noreply@gmail.com",
-      to: email,
+      to: user.email,
       subject: "Teckzite Registration Successfull",
       html: `
        <h1>Cheerio Invitation</h1>
-       <h1>${teckziteId}</h1>
-       <h1>${firstName}</h1>
-       <h1>${lastName}</h1>
-       <h1>${college}</h1>
-       <h1>${amountPaid}</h1>
-       <h1>${phno}</h1>
-       <h1>${year}</h1>
-       <h1>${branch}</h1>
-       <h1>${collegeId}</h1>
-       <h1>${gender}</h1>
-       <h1>${state}</h1>
-        
+       <h1>${user.tzkid}</h1>
+       <h1>${user.email}</h1>
+       <h1>${user.firstName}</h1>
+       <h1>${user.lastName}</h1>
+       <h1>${user.college}</h1>
+       <h1>${user.phno}</h1>
+       <h1>${user.year}</h1>
+       <h1>${user.branch}</h1>
+       <h1>${user.collegeId}</h1>
+       <h1>${user.gender}</h1>
+       <h1>${user.amountPaid}</h1>
+       <h1>${user.state } ${user.district} ${user.city} </h1>
+      <h1>${user.mode}</h1>
     
 
       `,
