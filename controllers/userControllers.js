@@ -466,3 +466,20 @@ export const getAllSignUsers = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params; // Assuming the ID of the user to be deleted is passed in the request parameters
+
+  try {
+    const user = await User.findOneAndDelete({ tzkid: id }); // Find and delete user based on tzkid
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};

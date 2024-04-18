@@ -30,3 +30,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjVmO
     "mode": "offline_mode",
     "referredBy": "example_referral_id"
 }
+
+###
+DELETE http://localhost:4000/user/delete/tzk241183
