@@ -29,7 +29,6 @@ export const instance = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET_KEY,
 });
 
-/* DATABSE CONNECTION */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -49,5 +48,8 @@ app.use("/workshops", workshopRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/admin", adminRoutes);
 app.use("/room", roomRoutes);
-
 app.get("/signusers", adminTokenCheck, getAllSignUsers);
+
+app.get('/', (req, res) => {
+  res.status(200).json({ message: "Welcome to website of the teckzite" });
+});
