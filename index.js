@@ -11,6 +11,7 @@ import workshopRoutes from "./routes/workshopRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
+import qrRoutes from './routes/qrRoutes.js';
 
 import adminTokenCheck from "./middleware/adminTokenCheck.js";
 import { getAllSignUsers } from "./controllers/userControllers.js";
@@ -48,8 +49,10 @@ app.use("/workshops", workshopRoutes);
 app.use("/notifications", notificationRoutes);
 app.use("/admin", adminRoutes);
 app.use("/room", roomRoutes);
-app.get("/signusers", adminTokenCheck, getAllSignUsers);
+app.use("/qr",qrRoutes);
 
+
+app.get("/signusers", adminTokenCheck, getAllSignUsers);
 app.get('/', (req, res) => {
   res.status(200).json({ message: "Welcome to website of the teckzite" });
 });
